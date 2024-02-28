@@ -3,8 +3,7 @@
 </script>
 
 <p class="whitespace-nowrap">
-	{data.rid}
-	{#if data.strength_of_knowledge && data.strength_of_knowledge.symbol !== undefined}
-		<sub>{data.strength_of_knowledge.symbol}</sub>
-	{/if}
+	{#if data.strength_of_knowledge && data.strength_of_knowledge.symbol !== undefined}<span
+			class="font-mono text-2xl">{data.strength_of_knowledge.symbol}</span
+		>{/if}{data.rid}
 </p>
