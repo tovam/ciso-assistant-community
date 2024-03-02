@@ -148,6 +148,7 @@ MIDDLEWARE = [
     "django_cprofile_middleware.middleware.ProfilerMiddleware",
 ]
 DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
+# refer to https://medium.com/kami-people/profiling-in-django-9f4d403a394f for cprofile usage
 
 ROOT_URLCONF = "ciso_assistant.urls"
 LOGIN_REDIRECT_URL = "home"
