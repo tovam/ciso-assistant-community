@@ -145,7 +145,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_structlog.middlewares.RequestMiddleware",
+    "django_cprofile_middleware.middleware.ProfilerMiddleware",
 ]
+DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
 
 ROOT_URLCONF = "ciso_assistant.urls"
 LOGIN_REDIRECT_URL = "home"
