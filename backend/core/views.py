@@ -73,6 +73,7 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     model: models.Model
 
+    @silk_profile()
     def get_queryset(self):
         if not self.model:
             return None
@@ -82,6 +83,7 @@ class BaseModelViewSet(viewsets.ModelViewSet):
         queryset = self.model.objects.filter(id__in=object_ids_view)
         return queryset
 
+    @silk_profile()
     def get_serializer_class(self):
         base_name = self.model.__name__
 
@@ -101,6 +103,7 @@ class BaseModelViewSet(viewsets.ModelViewSet):
 
     COMMA_SEPARATED_UUIDS_REGEX = r"^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}(,[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})*$"
 
+    @silk_profile()
     def _process_request_data(self, request: Request) -> None:
         """
         Process the request data to split comma-separated UUIDs into a list
@@ -131,6 +134,14 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     def partial_update(self, request: Request, *args, **kwargs) -> Response:
         self._process_request_data(request)
         return super().partial_update(request, *args, **kwargs)
+
+    @silk_profile()
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        return super().list(request, *args, **kwargs)
+
+    @silk_profile()
+    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+        return super().retrieve(request, *args, **kwargs)
 
     class Meta:
         abstract = True

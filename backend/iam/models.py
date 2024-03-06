@@ -1,9 +1,10 @@
 """ IAM model for CISO Assistant
     Inspired from Azure IAM model """
-
+from silk.profiling.profiler import silk_profile
 from collections import defaultdict
 from typing import Any, List, Self, Tuple
 import uuid
+from django.db.models.query_utils import Q
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
@@ -411,13 +412,10 @@ class User(AbstractBaseUser, AbstractBaseModel, FolderMixin):
                 raise primary_exception
 
     def get_user_groups(self):
-        # pragma pylint: disable=no-member
-        """get the list of user groups containing the user"""
-        user_group_list = []
-        for user_group in UserGroup.objects.all():
-            if self in user_group.user_set.all():
-                user_group_list.append((user_group.__str__(), user_group.builtin))
-        return user_group_list
+        return [
+            (user_group.__str__(), user_group.builtin)
+            for user_group in self.user_groups.all()
+        ]
 
     @property
     def has_backup_permission(self) -> bool:
@@ -548,6 +546,7 @@ class RoleAssignment(NameDescriptionMixin, FolderMixin):
         ]
 
     @staticmethod
+    @silk_profile()
     def get_accessible_object_ids(
         folder: Folder, user: AbstractBaseUser | AnonymousUser, object_type: Any
     ) -> Tuple["list[Any]", "list[Any]", "list[Any]"]:
@@ -642,12 +641,20 @@ class RoleAssignment(NameDescriptionMixin, FolderMixin):
         )
 
     @staticmethod
+    @silk_profile()
     def get_role_assignments(user):
-        """get all role assignments attached to a user directly or indirectly"""
-        assignments = list(user.roleassignment_set.all())
-        for user_group in UserGroup.get_user_groups(user):
-            assignments += list(user_group.roleassignment_set.all())
-        return assignments
+        # Assuming UserGroup has a ManyToManyField to User called 'users'
+        # and RoleAssignment has a ForeignKey to both User and UserGroup
+        user_groups_ids = user.user_groups.values_list("id", flat=True)
+
+        # Construct a Q object to query RoleAssignments related either to the user directly
+        # or through the user's groups
+        query = Q(user_id=user.id) | models.Q(user_group_id__in=user_groups_ids)
+
+        # Execute a single query to get all RoleAssignments
+        assignments = RoleAssignment.objects.filter(query).distinct()
+
+        return list(assignments)
 
     @staticmethod
     def get_permissions(user: AbstractBaseUser | AnonymousUser):
