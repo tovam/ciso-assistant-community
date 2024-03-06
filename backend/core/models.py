@@ -756,7 +756,7 @@ class Policy(AppliedControl):
 ########################### Secondary objects #########################
 
 
-class Assessment(NameDescriptionMixin):
+class Assessment(NameDescriptionMixin, FolderMixin):
     class Status(models.TextChoices):
         PLANNED = "planned", _("Planned")
         IN_PROGRESS = "in_progress", _("In progress")

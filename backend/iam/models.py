@@ -567,7 +567,11 @@ class RoleAssignment(NameDescriptionMixin, FolderMixin):
         folders_with_local_view = set()
         permissions_per_object_id = defaultdict(set)
         ref_permission = Permission.objects.get(codename="view_folder")
-        all_objects = object_type.objects.all()
+        all_objects = (
+            object_type.objects.select_related("folder")
+            if object_type != Folder
+            else Folder.objects.all()
+        )
         folder_for_object = {x: Folder.get_folder(x) for x in all_objects}
         perimeter = set()
         perimeter.add(folder)
