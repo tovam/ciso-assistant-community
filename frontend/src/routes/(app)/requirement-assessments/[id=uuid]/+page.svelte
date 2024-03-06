@@ -28,7 +28,6 @@
 	} from '@skeletonlabs/skeleton';
 	import { superForm } from 'sveltekit-superforms/client';
 
-	import * as m from '$paraglide/messages';
 	import { localItems, capitalizeFirstLetter } from '$lib/utils/locales';
 	import { languageTag } from '$paraglide/runtime';
 
@@ -233,13 +232,11 @@
 								<AutocompleteSelect
 									multiple
 									{form}
-									options={getOptions({ objects: data.model.foreignKeys['applied_controls'] })}
+									model={data.model}
+									foreignKey
 									field="applied_controls"
 								/>
-								<ModelTable
-									source={data.tables['applied-controls']}
-									URLModel="applied-controls"
-								/>
+								<ModelTable source={data.tables['applied-controls']} URLModel="applied-controls" />
 							</div>
 						{/if}
 						{#if tabSet === 1}
@@ -256,7 +253,8 @@
 								<AutocompleteSelect
 									multiple
 									{form}
-									options={getOptions({ objects: data.model.foreignKeys['evidences'] })}
+									model={data.model}
+									foreignKey
 									field="evidences"
 								/>
 								<ModelTable source={data.tables['evidences']} URLModel="evidences" />

@@ -18,10 +18,10 @@ export const load = (async ({ fetch, params }) => {
 	const requirementAssessment = await res.json();
 
 	const compliance_assessment = await fetch(
-		`${BASE_API_URL}/compliance-assessments/${requirementAssessment.compliance_assessment}`
+		`${BASE_API_URL}/compliance-assessments/${requirementAssessment.compliance_assessment.id}/`
 	).then((res) => res.json());
 	const requirement = await fetch(
-		`${BASE_API_URL}/requirement-nodes/${requirementAssessment.requirement}`
+		`${BASE_API_URL}/requirement-nodes/${requirementAssessment.requirement}/`
 	).then((res) => res.json());
 	const parentRequirementNodeEndpoint = `${BASE_API_URL}/requirement-nodes/?urn=${requirement.parent_urn}`;
 	let parent = await fetch(parentRequirementNodeEndpoint)
@@ -35,27 +35,10 @@ export const load = (async ({ fetch, params }) => {
 
 	const model = getModelInfo(URLModel);
 
-	const objectEndpoint = `${BASE_API_URL}/${URLModel}/${params.id}/object`;
+	const objectEndpoint = `${BASE_API_URL}/${URLModel}/${params.id}/object/`;
 	const object = await fetch(objectEndpoint).then((res) => res.json());
 	const schema = modelSchema(URLModel);
 	const form = await superValidate(object, schema, { errors: true });
-
-	const foreignKeys: Record<string, any> = {};
-
-	if (model.foreignKeyFields) {
-		for (const keyField of model.foreignKeyFields) {
-			const queryParams = keyField.urlParams ? `?${keyField.urlParams}` : '';
-			const url = `${BASE_API_URL}/${keyField.urlModel}/${queryParams}`;
-			const response = await fetch(url);
-			if (response.ok) {
-				foreignKeys[keyField.field] = await response.json().then((data) => data.results);
-			} else {
-				console.error(`Failed to fetch data for ${keyField.field}: ${response.statusText}`);
-			}
-		}
-	}
-
-	model.foreignKeys = foreignKeys;
 
 	const selectOptions: Record<string, any> = {};
 
@@ -130,23 +113,6 @@ export const load = (async ({ fetch, params }) => {
 		}
 	}
 
-	const measureForeignKeys: Record<string, any> = {};
-
-	if (measureModel.foreignKeyFields) {
-		for (const keyField of measureModel.foreignKeyFields) {
-			const queryParams = keyField.urlParams ? `?${keyField.urlParams}` : '';
-			const url = `${BASE_API_URL}/${keyField.urlModel}/${queryParams}`;
-			const response = await fetch(url);
-			if (response.ok) {
-				measureForeignKeys[keyField.field] = await response.json().then((data) => data.results);
-			} else {
-				console.error(`Failed to fetch data for ${keyField.field}: ${response.statusText}`);
-			}
-		}
-	}
-
-	measureModel.foreignKeys = measureForeignKeys;
-
 	const evidenceModel = getModelInfo('evidences');
 	const evidenceCreateSchema = modelSchema('evidences');
 	const evidenceInitialData = {
@@ -177,23 +143,6 @@ export const load = (async ({ fetch, params }) => {
 	}
 
 	evidenceModel['selectOptions'] = evidenceSelectOptions;
-
-	const evidenceForeignKeys: Record<string, any> = {};
-
-	if (evidenceModel.foreignKeyFields) {
-		for (const keyField of evidenceModel.foreignKeyFields) {
-			const queryParams = keyField.urlParams ? `?${keyField.urlParams}` : '';
-			const url = `${BASE_API_URL}/${keyField.urlModel}/${queryParams}`;
-			const response = await fetch(url);
-			if (response.ok) {
-				evidenceForeignKeys[keyField.field] = await response.json().then((data) => data.results);
-			} else {
-				console.error(`Failed to fetch data for ${keyField.field}: ${response.statusText}`);
-			}
-		}
-	}
-
-	evidenceModel.foreignKeys = evidenceForeignKeys;
 
 	return {
 		URLModel,

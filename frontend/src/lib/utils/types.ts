@@ -35,7 +35,7 @@ export const URL_MODEL = [
 	'compliance-assessments',
 	'evidences',
 	'frameworks',
-	'requirements',
+	'requirement-nodes',
 	'requirement-assessments',
 	'libraries'
 ] as const;

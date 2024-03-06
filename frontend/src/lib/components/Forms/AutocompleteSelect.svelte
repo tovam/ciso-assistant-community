@@ -12,17 +12,51 @@
 
 	export let hide = false;
 
-	const { value, errors, constraints } = formFieldProxy(form, field);
+	let { value, errors, constraints } = formFieldProxy(form, field);
 
-	export let options: { label: string; value: string; suggested?: boolean }[];
+	export let model: ModelInfo | undefined = undefined;
+	export let foreignKey = false;
+
+	const foreignKeys: Record<string, any> = {};
+
+	let loading = true; // Track loading state
+
+	export let options: { label: string; value: string; suggested?: boolean }[] = [];
+	$: options = loading ? [] : getOptions({ objects: foreignKeys[field] });
+	let selected: typeof options = [];
 
 	import MultiSelect from 'svelte-multiselect';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import type { ModelInfo } from '$lib/utils/types';
+	import { getOptions } from '$lib/utils/crud';
 
-	let selected: typeof options = options.length === 1 && $constraints?.required ? [options[0]] : [];
-	if ($value) {
-		selected = options.filter((item) => $value.includes(item.value));
-	}
+	onMount(async () => {
+		if (model && foreignKey && model.foreignKeyFields) {
+			for (const keyField of model.foreignKeyFields) {
+				const queryParams = keyField.urlParams ? `?${keyField.urlParams}` : '';
+				const url = `/${keyField.urlModel}/${queryParams}`;
+				try {
+					const response = await fetch(url);
+					if (response.ok) {
+						const responseData = await response.json();
+						foreignKeys[keyField.field] = responseData;
+					} else {
+						console.error(`Failed to fetch data for ${keyField.field}: ${response.statusText}`);
+					}
+				} catch (error) {
+					console.error(`Error fetching data for ${keyField.field}: ${error}`);
+				}
+			}
+			selected = options.length === 1 && $constraints?.required ? [options[0]] : [];
+			if ($value) {
+				selected = options.filter((item) => $value.includes(item.value));
+			}
+			console.log('value', $value);
+
+			loading = false; // Update loading state once loading is complete
+		}
+	});
+
 	let selectedValues: (string | undefined)[] = [];
 
 	$: selectedValues = selected.map((item) => item.value);
@@ -84,12 +118,10 @@
 				{#if option.suggested}
 					<span class="text-indigo-600">{option.label}</span>
 					<span class="text-sm text-gray-500"> (suggested)</span>
+				{:else if localItems(languageTag())[toCamelCase(option.label)]}
+					{localItems(languageTag())[toCamelCase(option.label)]}
 				{:else}
-					{#if localItems(languageTag())[toCamelCase(option.label)]}
-						{localItems(languageTag())[toCamelCase(option.label)]}
-					{:else}
-						{option.label}
-					{/if}
+					{option.label}
 				{/if}
 			</MultiSelect>
 		{:else}
