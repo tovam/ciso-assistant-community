@@ -1,6 +1,5 @@
 """ IAM model for CISO Assistant
     Inspired from Azure IAM model """
-from silk.profiling.profiler import silk_profile
 from collections import defaultdict
 from typing import Any, List, Self, Tuple
 import uuid
@@ -546,7 +545,7 @@ class RoleAssignment(NameDescriptionMixin, FolderMixin):
         ]
 
     @staticmethod
-    @silk_profile()
+
     def get_accessible_object_ids(
         folder: Folder, user: AbstractBaseUser | AnonymousUser, object_type: Any
     ) -> Tuple["list[Any]", "list[Any]", "list[Any]"]:
@@ -641,7 +640,7 @@ class RoleAssignment(NameDescriptionMixin, FolderMixin):
         )
 
     @staticmethod
-    @silk_profile()
+
     def get_role_assignments(user):
         # Assuming UserGroup has a ManyToManyField to User called 'users'
         # and RoleAssignment has a ForeignKey to both User and UserGroup

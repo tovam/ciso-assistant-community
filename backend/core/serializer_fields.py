@@ -1,7 +1,6 @@
 from typing import Any
 from django.db import models
 from rest_framework import serializers
-from silk.profiling.profiler import silk_profile
 
 from iam.models import Folder
 
@@ -22,7 +21,6 @@ class FieldsRelatedField(serializers.RelatedField):
         self.fields = fields
         super().__init__(**kwargs)
 
-    @silk_profile()
     def to_representation(
         self, value, fields: list[str | dict[str, list[str]]] | None = None
     ) -> dict[str, Any]:
