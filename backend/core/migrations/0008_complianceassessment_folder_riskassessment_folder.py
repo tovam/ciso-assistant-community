@@ -6,21 +6,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0007_alter_requirementlevel_framework_and_more'),
-        ('iam', '0001_initial'),
+        ("core", "0007_alter_requirementlevel_framework_and_more"),
+        ("iam", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='complianceassessment',
-            name='folder',
-            field=models.ForeignKey(default=iam.models.Folder.get_root_folder, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_folder', to='iam.folder'),
+            model_name="complianceassessment",
+            name="folder",
+            field=models.ForeignKey(
+                default=iam.models.Folder.get_root_folder,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_folder",
+                to="iam.folder",
+            ),
         ),
         migrations.AddField(
-            model_name='riskassessment',
-            name='folder',
-            field=models.ForeignKey(default=iam.models.Folder.get_root_folder, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_folder', to='iam.folder'),
+            model_name="riskassessment",
+            name="folder",
+            field=models.ForeignKey(
+                default=iam.models.Folder.get_root_folder,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_folder",
+                to="iam.folder",
+            ),
+        ),
+        migrations.AddField(
+            model_name="riskscenario",
+            name="folder",
+            field=models.ForeignKey(
+                default=iam.models.Folder.get_root_folder,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_folder",
+                to="iam.folder",
+            ),
         ),
     ]

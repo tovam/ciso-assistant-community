@@ -1066,7 +1066,7 @@ def risk_scoring(probability, impact, risk_matrix: RiskMatrix) -> int:
     return risk_index
 
 
-class RiskScenario(NameDescriptionMixin):
+class RiskScenario(NameDescriptionMixin, FolderMixin):
     TREATMENT_OPTIONS = [
         ("open", _("Open")),
         ("mitigate", _("Mitigate")),
