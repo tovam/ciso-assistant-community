@@ -55,12 +55,14 @@
 	import CreateModal from '$lib/components/Modals/CreateModal.svelte';
 	import DeleteConfirmModal from '$lib/components/Modals/DeleteConfirmModal.svelte';
 	import ParaglideJsProvider from './ParaglideJsProvider.svelte';
+	import ComponentModal from '$lib/components/Modals/ComponentModal.svelte';
 
 	const modalRegistry: Record<string, ModalComponent> = {
 		// Set a unique modal ID, then pass the component reference
 		displayJSONModal: { ref: DisplayJSONModal },
 		createModal: { ref: CreateModal },
-		deleteConfirmModal: { ref: DeleteConfirmModal }
+		deleteConfirmModal: { ref: DeleteConfirmModal },
+		componentModal: { ref: ComponentModal }
 	};
 </script>
 

@@ -4,7 +4,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
 	const endpoint = `/libraries/${params.id}`;
 
 	return {
-		tree: fetch(`/libraries/${params.id}/tree`).then((res) => res.json()) ?? {},
+		// tree: fetch(`/libraries/${params.id}/tree`).then((res) => (res.ok ? res.json() : {})),
 		library: await fetch(endpoint).then((res) => res.json())
 	};
 };

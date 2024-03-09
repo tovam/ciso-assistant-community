@@ -7,24 +7,22 @@
 	import AutocompleteSelect from './AutocompleteSelect.svelte';
 	import Select from './Select.svelte';
 
+	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 	import { getOptions } from '$lib/utils/crud';
 	import { modelSchema } from '$lib/utils/schemas';
 	import type { ModelInfo, urlModel } from '$lib/utils/types';
+	import * as m from '$paraglide/messages.js';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { AnyZodObject } from 'zod';
-	import HiddenInput from './HiddenInput.svelte';
 	import FileInput from './FileInput.svelte';
-	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
-	import * as m from '$paraglide/messages.js';
-	import { localItems, toCamelCase } from '$lib/utils/locales';
-	import { languageTag } from '$paraglide/runtime';
+	import HiddenInput from './HiddenInput.svelte';
 
 	export let form: SuperValidated<AnyZodObject>;
 	export let model: ModelInfo;
-	export let origin: string = "default";
+	export let origin = 'default';
 	export let closeModal = false;
-	export let parent: any;
+	export let parent: any = undefined;
 	export let suggestions: { [key: string]: any } = {};
 
 	const URLModel = model.urlModel as urlModel;
@@ -73,7 +71,7 @@
 						.then((r) => {
 							form.form.update((currentData) => {
 								if (
-									origin === "edit" &&
+									origin === 'edit' &&
 									currentData['reference_control'] === initialData['reference_control'] &&
 									!updated_fields.has('reference_control')
 								) {
@@ -138,13 +136,7 @@
 			field="reviewers"
 			label={m.reviewers()}
 		/>
-		<TextField
-			type="date"
-			{form}
-			field="eta"
-			label={m.eta()}
-			helpText={m.etaHelpText()}
-		/>
+		<TextField type="date" {form} field="eta" label={m.eta()} helpText={m.etaHelpText()} />
 		<TextField
 			type="date"
 			{form}
@@ -194,13 +186,7 @@
 			field="evidences"
 			label={m.evidences()}
 		/>
-		<TextField
-			type="date"
-			{form}
-			field="eta"
-			label={m.eta()}
-			helpText={m.etaHelpText()}
-		/>
+		<TextField type="date" {form} field="eta" label={m.eta()} helpText={m.etaHelpText()} />
 		<TextField
 			type="date"
 			{form}
@@ -208,12 +194,7 @@
 			label={m.expiryDate()}
 			helpText={m.expiryDateHelpText()}
 		/>
-		<TextField
-			{form}
-			field="link"
-			label={m.link()}
-			helpText={m.linkHelpText()}
-		/>
+		<TextField {form} field="link" label={m.link()} helpText={m.linkHelpText()} />
 		<Select
 			{form}
 			options={model.selectOptions['effort']}
@@ -299,12 +280,7 @@
 			label={m.domain()}
 			hide={initialData.applied_controls || initialData.requirement_assessments}
 		/>
-		<TextField
-			{form}
-			field="link"
-			label={m.link()}
-			helpText={m.linkHelpText()}
-		/>
+		<TextField {form} field="link" label={m.link()} helpText={m.linkHelpText()} />
 	{:else if URLModel === 'compliance-assessments'}
 		<AutocompleteSelect
 			{form}
@@ -334,13 +310,7 @@
 			field="reviewers"
 			label={m.reviewers()}
 		/>
-		<TextField
-			type="date"
-			{form}
-			field="eta"
-			label={m.eta()}
-			helpText={m.etaHelpText()}
-		/>
+		<TextField type="date" {form} field="eta" label={m.eta()} helpText={m.etaHelpText()} />
 		<TextField
 			type="date"
 			{form}
@@ -388,12 +358,7 @@
 			/>
 		{/if}
 		{#if shape.is_active}
-			<Checkbox
-				{form}
-				field="is_active"
-				label={m.isActive()}
-				helpText={m.isActiveHelpText()}
-			/>
+			<Checkbox {form} field="is_active" label={m.isActive()} helpText={m.isActiveHelpText()} />
 		{/if}
 	{/if}
 	<div class="flex flex-row justify-between space-x-4">
