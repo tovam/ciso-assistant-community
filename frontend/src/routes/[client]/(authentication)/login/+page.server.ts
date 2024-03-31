@@ -13,7 +13,6 @@ export const load: PageServerLoad = async ({ request, locals }) => {
 	}
 
 	const form = await superValidate(request, loginSchema);
-
 	return { form };
 };
 
@@ -23,7 +22,7 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-
+		console.log("coucou", request, url)
 		const username = form.data.username;
 		const password = form.data.password;
 
@@ -86,6 +85,7 @@ export const actions: Actions = {
 				});
 			}
 		}
+		console.log("coucou2")
 		redirect(302, url.searchParams.get('next') || '/analytics');
 	}
 };

@@ -2,6 +2,11 @@ import { BASE_API_URL } from '$lib/utils/constants';
 import type { User } from '$lib/utils/types';
 import { redirect, type Handle, type RequestEvent, type HandleFetch } from '@sveltejs/kit';
 
+export const rewriteUrl = (url: string): string => {
+	console.log("coucou", url)
+	return url;
+}
+
 async function ensureCsrfToken(event: RequestEvent): Promise<string> {
 	let csrfToken = event.cookies.get('csrftoken') || '';
 	if (!csrfToken) {
