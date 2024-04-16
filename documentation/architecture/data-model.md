@@ -35,8 +35,8 @@ erDiagram
     DOMAIN                ||--o{ COMPLIANCE_ASSESSMENT_REVIEW: contains
     ROOT_FOLDER           ||--o{ FRAMEWORK                   : contains
     ROOT_FOLDER           ||--o{ REFERENCE_CONTROL           : contains
-    ROOT_FOLDER           ||--o{ LIBRARY                     : contains
-    ROOT_FOLDER           ||--o{ IMPORTED_LIBRARY            : contains
+    ROOT_FOLDER           ||--o{ STORED_LIBRARY              : contains
+    ROOT_FOLDER           ||--o{ LOADED_LIBRARY              : contains
     ROOT_FOLDER           ||--o{ USER                        : contains
     ROOT_FOLDER           ||--o{ USER_GROUP                  : contains
     ROOT_FOLDER           ||--o{ ROLE                        : contains
@@ -429,8 +429,8 @@ AbstractBaseModel      <|-- NameDescriptionMixin
 NameDescriptionMixin   <|-- ReferentialObjectMixin
 FolderMixin            <|-- ReferentialObjectMixin
 ReferentialObjectMixin <|-- LibraryMixin
-LibraryMixin           <|-- Library
-LibraryMixin           <|-- ImportedLibrary
+LibraryMixin           <|-- StoredLibrary
+LibraryMixin           <|-- LoadedLibrary
 ReferentialObjectMixin <|-- Threat
 ReferentialObjectMixin <|-- ReferenceControl
 ReferentialObjectMixin <|-- RiskMatrix
@@ -475,23 +475,23 @@ namespace ReferentialObjects {
         +Library[] dependencies
     }
 
-    class Library {
+    class StoredLibrary {
         +CharField hash_checksum
         +BinaryField content
     }
 
-    class ImportedLibrary {
+    class LoadedLibrary {
         +reference_count() int
     }
 
     class Threat {
-        +ImportedLibrary library
+        +LoadedLibrary library
         +is_deletable() bool
         +frameworks() Framework[]
     }
 
     class ReferenceControl {
-        +ImportedLibrary library
+        +LoadedLibrary library
         +CharField category
         +JSONField typical_evidence
         +is_deletable() bool
@@ -499,7 +499,7 @@ namespace ReferentialObjects {
     }
 
     class RiskMatrix {
-        +ImportedLibrary library
+        +LoadedLibrary library
         +JSONField json_definition
         +BooleanField is_enabled
         +CharField provider
@@ -512,7 +512,7 @@ namespace ReferentialObjects {
     }
 
     class Framework {
-        +ImportedLibrary library
+        +LoadedLibrary library
         +int get_next_order_id(obj_type, _parent_urn)
         +is_deletable() bool
     }
