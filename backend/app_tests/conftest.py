@@ -35,9 +35,17 @@ def authenticated_client(app_config):
 
 
 @pytest.fixture(
-        params=[(role, folder) for role in GROUPS_PERMISSIONS.keys() for folder in ["test", "test_outside_domain"]],
-        ids=[GROUPS_PERMISSIONS[key]["name"]+folder_name for key in GROUPS_PERMISSIONS.keys() for folder_name in ["", "_outside_domain"]]
-    )
+    params=[
+        (role, folder)
+        for role in GROUPS_PERMISSIONS.keys()
+        for folder in ["test", "test_outside_domain"]
+    ],
+    ids=[
+        GROUPS_PERMISSIONS[key]["name"] + folder_name
+        for key in GROUPS_PERMISSIONS.keys()
+        for folder_name in ["", "_outside_domain"]
+    ],
+)
 def test(authenticated_client, request) -> Test:
     """Get the elements used by the tests such as client and associated folder"""
     client, folder, assigned_folder = EndpointTestsUtils.get_test_client_and_folder(
