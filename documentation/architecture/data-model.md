@@ -473,6 +473,7 @@ namespace ReferentialObjects {
         +CharField provider
         +CharField packager
         +Library[] dependencies
+        +BooleanField builtin
     }
 
     class StoredLibrary {
