@@ -22,14 +22,7 @@ export const listViewFields = {
 		meta: ['id', 'urn']
 	},
 	'risk-scenarios': {
-		head: [
-			'name',
-			'threats',
-			'riskAssessment',
-			'appliedControls',
-			'currentLevel',
-			'residualLevel'
-		],
+		head: ['name', 'threats', 'riskAssessment', 'appliedControls', 'currentLevel', 'residualLevel'],
 		body: [
 			'name',
 			'threats',

@@ -51,7 +51,7 @@ export const actions: Actions = {
 			setFlash(
 				{
 					type: 'error',
-					message: m.waitBeforeRequestingResetLink({timing: status.retryAfter.toString()})
+					message: m.waitBeforeRequestingResetLink({ timing: status.retryAfter.toString() })
 				},
 				event
 			);
@@ -82,7 +82,7 @@ export const actions: Actions = {
 		setFlash(
 			{
 				type: 'success',
-				message: m.resetLinkSent({email: email})
+				message: m.resetLinkSent({ email: email })
 			},
 			event
 		);

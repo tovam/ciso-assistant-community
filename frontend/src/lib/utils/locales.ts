@@ -314,8 +314,12 @@ export function localItems(languageTag: string): LocalItems {
 		libraryImportError: m.libraryImportError({ languageTag: languageTag }),
 		libraryAlreadyExistsError: m.libraryAlreadyImportedError({ languageTag: languageTag }),
 		invalidLibraryFileError: m.invalidLibraryFileError({ languageTag: languageTag }),
-		attemptToDeleteOnlyAdminAccountError: m.attemptToDeleteOnlyAdminAccountError({ languageTag: languageTag }),
-		attemptToRemoveOnlyAdminUserGroup: m.attemptToRemoveOnlyAdminUserGroup({ languageTag: languageTag })
+		attemptToDeleteOnlyAdminAccountError: m.attemptToDeleteOnlyAdminAccountError({
+			languageTag: languageTag
+		}),
+		attemptToRemoveOnlyAdminUserGroup: m.attemptToRemoveOnlyAdminUserGroup({
+			languageTag: languageTag
+		})
 	};
 	return LOCAL_ITEMS;
 }

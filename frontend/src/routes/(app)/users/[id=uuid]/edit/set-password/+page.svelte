@@ -41,8 +41,10 @@
 					mandatory
 				/>
 				<p class="pt-3">
-					<button class="btn variant-filled-primary font-semibold w-full" data-testid="save-button" type="submit"
-						>Set Password</button
+					<button
+						class="btn variant-filled-primary font-semibold w-full"
+						data-testid="save-button"
+						type="submit">Set Password</button
 					>
 				</p>
 			</SuperForm>
