@@ -21,9 +21,7 @@ User = get_user_model()
 class BaseModelSerializer(serializers.ModelSerializer):
     def update(self, instance: models.Model, validated_data: Any) -> models.Model:
         if hasattr(instance, "urn") and getattr(instance, "urn"):
-            raise PermissionDenied(
-                {"urn": "Imported objects cannot be modified"}
-            )
+            raise PermissionDenied({"urn": "Imported objects cannot be modified"})
         try:
             object_updated = super().update(instance, validated_data)
             return object_updated
@@ -162,7 +160,7 @@ class ReferenceControlWriteSerializer(BaseModelSerializer):
 
 class ReferenceControlReadSerializer(ReferenceControlWriteSerializer):
     folder = FieldsRelatedField()
-    library = FieldsRelatedField(["name","urn"])
+    library = FieldsRelatedField(["name", "urn"])
 
 
 class LibraryReadSerializer(BaseModelSerializer):
@@ -187,7 +185,7 @@ class ThreatWriteSerializer(BaseModelSerializer):
 
 class ThreatReadSerializer(BaseModelSerializer):
     folder = FieldsRelatedField()
-    library = FieldsRelatedField(["name","urn"])
+    library = FieldsRelatedField(["name", "urn"])
 
     class Meta:
         model = Threat
@@ -407,7 +405,7 @@ class FolderReadSerializer(BaseModelSerializer):
 
 class FrameworkReadSerializer(BaseModelSerializer):
     folder = FieldsRelatedField()
-    library = FieldsRelatedField(["name","urn"])
+    library = FieldsRelatedField(["name", "urn"])
 
     class Meta:
         model = Framework
